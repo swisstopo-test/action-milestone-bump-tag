@@ -1,5 +1,12 @@
 import { WebhookPayload } from '@actions/github/lib/interfaces';
 
+export interface RepoWebhookPayload {
+    ref: string;
+    repo: {
+        git_tags_url: string;
+    }
+}
+
 export interface PullRequestWebhookPayload extends WebhookPayload {
     // eslint-disable-next-line camelcase
     pull_request?: {
@@ -15,11 +22,7 @@ export interface PullRequestWebhookPayload extends WebhookPayload {
             id: number;
             [key: string]: any;
         };
-        base: {
-            ref: string;
-        },
-        head: {
-            ref: string;
-        },
+        base: RepoWebhookPayload;
+        head: RepoWebhookPayload;
     },
   }
