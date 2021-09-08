@@ -11,7 +11,7 @@ async function run() {
     }
     core.debug(`pull request payload: ${pullRequest}`)
     core.info(`pull request payload: ${pullRequest}`)
-    console.log(`pull request payload: ${JSON.stringify(pullRequest)}`)
+    console.log(`pull request payload: ${JSON.stringify(pullRequest,null, 2)}`)
 }
 
 run().catch((error) => {
