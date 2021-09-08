@@ -28,6 +28,8 @@ async function run() {
         return;
     }
     core.debug(`pull request payload: ${pullRequest}`);
+    core.info(`pull request payload: ${pullRequest}`);
+    console.log(`pull request payload: ${pullRequest}`);
 }
 run().catch((error) => {
     core.setFailed(error.message);
