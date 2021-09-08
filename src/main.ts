@@ -19,8 +19,10 @@ async function run() {
     if (pullRequest.merged && pullRequest.milestone) {
         const client = github.getOctokit(token);
         // get list of tags
-        const tags = await client.request(`GET ${pullRequest.base.repo.tags_url}`);
-
+        console.log(`GET ${pullRequest.base.repo.tags_url}`);
+        const response = await client.request(`GET ${pullRequest.base.repo.tags_url}`);
+        console.log('get tags: ', response)
+        const tags = response.data;
         console.log('Last tag: ', tags[0].name);
     }
 }
