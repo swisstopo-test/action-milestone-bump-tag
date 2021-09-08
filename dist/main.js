@@ -46,6 +46,7 @@ async function run() {
         const tags = response.data;
         console.log('Last tag: ', tags[0].name);
         const git = (0, simple_git_1.default)(process.cwd());
+        await git.fetch();
         const gitTags = await git.tags();
         console.log(gitTags);
         const logs = await git.log({ maxCount: 3 });
