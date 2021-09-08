@@ -27,7 +27,7 @@ async function run() {
         const tags = response.data;
         console.log('Last tag: ', tags[0].name);
 
-        const git = simpleGit();
+        const git = simpleGit(process.cwd());
 
         const gitTags = await git.tags();
         console.log(gitTags);
