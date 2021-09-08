@@ -5,4 +5,4 @@ outputs:
     description: 'New bump tag'
 runs:
   using: 'node12'
-  main: 'index.js'
+  main: 'dist/main.js'
