@@ -1,5 +1,7 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import simpleGit from 'simple-git';
+
 import { PullRequestWebhookPayload } from './interfaces';
 
 
@@ -24,6 +26,11 @@ async function run() {
         console.log('get tags: ', response)
         const tags = response.data;
         console.log('Last tag: ', tags[0].name);
+
+        const git = simpleGit();
+
+        const gitTags = await git.tags();
+        console.log(gitTags);
     }
 }
 

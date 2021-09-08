@@ -23,9 +23,11 @@
   "homepage": "https://github.com/swisstopo-test/action-milestone-bump-tag#readme",
   "dependencies": {
     "@actions/core": "^1.5.0",
-    "@actions/github": "^5.0.0"
+    "@actions/github": "^5.0.0",
+    "simple-git": "^2.45.1"
   },
   "devDependencies": {
+    "@types/node": "^16.7.13",
     "typescript": "^4.4.2"
   }
 }

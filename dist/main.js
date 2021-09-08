@@ -18,9 +18,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const github = __importStar(require("@actions/github"));
+const simple_git_1 = __importDefault(require("simple-git"));
 async function run() {
     const token = core.getInput('repo-token', { required: true });
     const pullRequest = github.context.payload.pull_request;
@@ -41,6 +45,9 @@ async function run() {
         console.log('get tags: ', response);
         const tags = response.data;
         console.log('Last tag: ', tags[0].name);
+        const git = (0, simple_git_1.default)();
+        const gitTags = await git.tags();
+        console.log(gitTags);
     }
 }
 run().catch((error) => {
