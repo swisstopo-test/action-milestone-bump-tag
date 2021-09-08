@@ -9,7 +9,12 @@ export interface PullRequestWebhookPayload extends WebhookPayload {
         html_url?: string;
         body?: string;
         merged: boolean;
-        milestone?: string;
+        milestone?: {
+            title: string;
+            state: string;
+            id: number;
+            [key: string]: any;
+        };
         base: {
             ref: string;
         },
