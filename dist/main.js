@@ -29,7 +29,11 @@ async function run() {
     }
     core.debug(`pull request payload: ${pullRequest}`);
     core.info(`pull request payload: ${pullRequest}`);
-    console.log(`pull request payload: ${JSON.stringify(pullRequest, null, 2)}`);
+    // console.log(`pull request payload: ${JSON.stringify(pullRequest,null, 2)}`)
+    console.log('pull_request: ', pullRequest);
+    console.log('merged: ', pullRequest.merged);
+    console.log('state: ', pullRequest.state);
+    console.log('milestone: ', pullRequest.milestone);
 }
 run().catch((error) => {
     core.setFailed(error.message);
