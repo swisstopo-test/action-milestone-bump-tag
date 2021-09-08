@@ -1,0 +1,8 @@
+name: 'Bump tag with milestone'
+description: 'Bump a tag based on milestone attached to the PR'
+outputs:
+  new_tag: # id of output
+    description: 'New bump tag'
+runs:
+  using: 'node12'
+  main: 'index.js'
