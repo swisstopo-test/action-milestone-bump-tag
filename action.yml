@@ -1,5 +1,9 @@
 name: 'Bump tag with milestone'
 description: 'Bump a tag based on milestone attached to the PR'
+inputs:
+  repo-token:
+    required: true
+    description: 'Github repository token'
 outputs:
   new_tag: # id of output
     description: 'New bump tag'

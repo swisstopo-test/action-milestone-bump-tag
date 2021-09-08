@@ -3,7 +3,7 @@ import { WebhookPayload } from '@actions/github/lib/interfaces';
 export interface RepoWebhookPayload {
     ref: string;
     repo: {
-        git_tags_url: string;
+        tags_url: string;
     }
 }
 
