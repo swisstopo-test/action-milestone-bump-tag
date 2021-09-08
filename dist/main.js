@@ -48,6 +48,8 @@ async function run() {
         const git = (0, simple_git_1.default)(process.cwd());
         const gitTags = await git.tags();
         console.log(gitTags);
+        const logs = await git.log({ maxCount: 3 });
+        console.log(logs);
     }
 }
 run().catch((error) => {

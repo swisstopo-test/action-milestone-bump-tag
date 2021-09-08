@@ -31,6 +31,9 @@ async function run() {
 
         const gitTags = await git.tags();
         console.log(gitTags);
+
+        const logs = await git.log({maxCount: 3})
+        console.log(logs)
     }
 }
 
