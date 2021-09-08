@@ -29,7 +29,7 @@ async function run() {
     }
     core.debug(`pull request payload: ${pullRequest}`);
     core.info(`pull request payload: ${pullRequest}`);
-    console.log(JSON.stringify(`pull request payload: ${pullRequest}`));
+    console.log(`pull request payload: ${JSON.stringify(pullRequest)}`);
 }
 run().catch((error) => {
     core.setFailed(error.message);
