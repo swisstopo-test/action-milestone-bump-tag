@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import simpleGit from 'simple-git'
 
-import { PullRequestWebhookPayload, GetTag } from './interfaces'
+import { PullRequestWebhookPayload, Tag } from './interfaces'
 import { getLastTag, getNewTag, getTagPattern } from './tags'
 
 async function run() {
@@ -13,7 +13,7 @@ async function run() {
     milestone_pattern
     const pullRequest = (github.context.payload as PullRequestWebhookPayload).pull_request
     if (!pullRequest) {
-        throw 'Could not get pull_request from context, exiting'
+        throw Error('Could not get pull_request from context, exiting')
     }
     // console.log('pull_request: ', pullRequest)
     console.log('merged: ', pullRequest.merged)
@@ -56,5 +56,7 @@ async function run() {
 }
 
 run().catch((error) => {
-    core.setFailed(error.message)
+    if (error instanceof Error) {
+        core.setFailed(error.message)
+    }
 })

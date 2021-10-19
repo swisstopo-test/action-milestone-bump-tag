@@ -47,7 +47,7 @@ function run() {
         milestone_pattern;
         const pullRequest = github.context.payload.pull_request;
         if (!pullRequest) {
-            throw 'Could not get pull_request from context, exiting';
+            throw Error('Could not get pull_request from context, exiting');
         }
         // console.log('pull_request: ', pullRequest)
         console.log('merged: ', pullRequest.merged);
@@ -80,7 +80,9 @@ function run() {
     });
 }
 run().catch((error) => {
-    core.setFailed(error.message);
+    if (error instanceof Error) {
+        core.setFailed(error.message);
+    }
 });
 
 
@@ -129,7 +131,7 @@ function getTags(token, tags_url) {
         const response = yield client.request(`GET ${tags_url}`);
         // console.log(response)
         if (response.status !== 200) {
-            throw `Could not get tags: GET ${tags_url} ${response.status}`;
+            throw Error(`Could not get tags: GET ${tags_url} ${response.status}`);
         }
         return response.data;
     });
@@ -180,7 +182,7 @@ function getNewTag(custom_tag, milestone_pattern, initial_tag_number, lastTag, m
     if (lastTag) {
         const m = lastTag.match(tag_pattern);
         if (!m || !m.groups || !m.groups.MILESTONE) {
-            throw `Invalid lastTag ${lastTag}, don't match ${tag_pattern.toString()}, cannot get new Tag`;
+            throw Error(`Invalid lastTag ${lastTag}, don't match ${tag_pattern.toString()}, cannot get new Tag`);
         }
         if (!m.groups.TAG_NUMBER) {
             // if there is no TAG_NUMBER in the custom_tag then we cannot bump the tag
@@ -194,7 +196,7 @@ function getNewTag(custom_tag, milestone_pattern, initial_tag_number, lastTag, m
     }
     else {
         if (!milestone) {
-            throw 'No last tag found and PR not attached to a milestone, cannot get new Tag';
+            throw Error('No last tag found and PR not attached to a milestone, cannot get new Tag');
         }
         newTag = custom_tag
             .replace('${MILESTONE}', milestone)

@@ -1,24 +1,24 @@
 import * as github from '@actions/github'
-import { GetTag } from './interfaces'
+import { Tag } from './interfaces'
 
-export async function getTags(token: string, tags_url: string): Promise<GetTag[]> {
+export async function getTags(token: string, tags_url: string): Promise<Tag[]> {
     const client = github.getOctokit(token)
 
     console.log(`GET ${tags_url}`)
     const response = await client.request(`GET ${tags_url}`)
     // console.log(response)
     if (response.status !== 200) {
-        throw `Could not get tags: GET ${tags_url} ${response.status}`
+        throw Error(`Could not get tags: GET ${tags_url} ${response.status}`)
     }
     return response.data
 }
 
-export function lastTag(tags: GetTag[], tag_pattern: RegExp): string | null {
-    let _tags: GetTag[]
+export function lastTag(tags: Tag[], tag_pattern: RegExp): string | null {
+    let _tags: Tag[]
     let _lastTag: string | null = null
 
-    _tags = tags.filter((t: GetTag) => tag_pattern.test(t.name))
-    _tags = _tags.sort((a: GetTag, b: GetTag) => {
+    _tags = tags.filter((t: Tag) => tag_pattern.test(t.name))
+    _tags = _tags.sort((a: Tag, b: Tag) => {
         if (a.name < b.name) {
             return 1
         } else if (a.name > b.name) {
@@ -73,7 +73,9 @@ export function getNewTag(
     if (lastTag) {
         const m = lastTag.match(tag_pattern)
         if (!m || !m.groups || !m.groups.MILESTONE) {
-            throw `Invalid lastTag ${lastTag}, don't match ${tag_pattern.toString()}, cannot get new Tag`
+            throw Error(
+                `Invalid lastTag ${lastTag}, don't match ${tag_pattern.toString()}, cannot get new Tag`
+            )
         }
         if (!m.groups.TAG_NUMBER) {
             // if there is no TAG_NUMBER in the custom_tag then we cannot bump the tag
@@ -85,7 +87,7 @@ export function getNewTag(
         }
     } else {
         if (!milestone) {
-            throw 'No last tag found and PR not attached to a milestone, cannot get new Tag'
+            throw Error('No last tag found and PR not attached to a milestone, cannot get new Tag')
         }
         newTag = custom_tag
             .replace('${MILESTONE}', milestone)

@@ -28,7 +28,6 @@ export interface PullRequestWebhookPayload extends WebhookPayload {
     }
 }
 
-export interface GetTag {
+export interface Tag {
     name: string
-    commit: any
 }
