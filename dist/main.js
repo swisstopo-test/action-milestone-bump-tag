@@ -18,39 +18,47 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const github = __importStar(require("@actions/github"));
-const simple_git_1 = __importDefault(require("simple-git"));
+const tags_1 = require("./tags");
 async function run() {
-    const token = core.getInput('repo-token', { required: true });
+    const token = core.getInput('repo_token', { required: true });
+    const custom_tag = core.getInput('custom_tag');
+    const initial_tag_number = Number(core.getInput('initial_tag_number'));
+    const milestone_pattern = core.getInput('milestone_pattern');
+    milestone_pattern;
     const pullRequest = github.context.payload.pull_request;
     if (!pullRequest) {
-        core.setFailed('Could not get pull_request from context, exiting');
-        return;
+        throw 'Could not get pull_request from context, exiting';
     }
-    // core.info('pull request payload: ' + pullRequest)
     console.log('pull_request: ', pullRequest);
     console.log('merged: ', pullRequest.merged);
     console.log('state: ', pullRequest.state);
     console.log('milestone: ', pullRequest.milestone);
-    if (pullRequest.merged && pullRequest.milestone) {
-        const client = github.getOctokit(token);
+    if (pullRequest.merged) {
+        const milestone = pullRequest.milestone ? pullRequest.milestone.title : null;
+        const tagPattern = (0, tags_1.getTagPattern)(custom_tag, milestone_pattern, milestone);
+        const lastTag = await (0, tags_1.getLastTag)(token, pullRequest.base.repo.tags_url, tagPattern);
+        console.log('Last Tag: ', lastTag);
+        const newTag = (0, tags_1.getNewTag)(custom_tag, milestone_pattern, initial_tag_number, lastTag, milestone);
+        console.log('New Tag: ', newTag);
+        // const client = github.getOctokit(token);
         // get list of tags
-        console.log(`GET ${pullRequest.base.repo.tags_url}`);
-        const response = await client.request(`GET ${pullRequest.base.repo.tags_url}`);
-        console.log('get tags: ', response);
-        const tags = response.data;
-        console.log('Last tag: ', tags[0].name);
-        const git = (0, simple_git_1.default)(process.cwd());
-        await git.fetch();
-        const gitTags = await git.tags();
-        console.log(gitTags);
-        const logs = await git.log({ maxCount: 3 });
-        console.log(logs);
+        // console.log(`GET ${pullRequest.base.repo.tags_url}`);
+        // const response = await client.request(`GET ${pullRequest.base.repo.tags_url}`);
+        // console.log('get tags: ', response)
+        // const tags = response.data;
+        // console.log('Last tag: ', tags[0].name);
+        // const git = simpleGit(process.cwd());
+        // await git.fetch();
+        // const gitTags = await git.tags();
+        // console.log(gitTags);
+        // const logs = await git.log({maxCount: 3})
+        // console.log(logs)
+    }
+    else {
+        console.log('Ignore non merged pull request');
     }
 }
 run().catch((error) => {
