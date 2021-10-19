@@ -17,5 +17,5 @@ outputs:
   new_tag: # id of output
     description: 'New tag'
 runs:
-  using: 'node14'
+  using: 'node12'
   main: 'dist/main.js'
