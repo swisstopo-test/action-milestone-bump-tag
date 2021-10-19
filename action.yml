@@ -18,4 +18,4 @@ outputs:
     description: 'New tag'
 runs:
   using: 'node12'
-  main: 'dist/main.js'
+  main: 'dist/index.js'
