@@ -6,7 +6,7 @@ export async function getTags(token: string, tags_url: string): Promise<GetTag[]
 
     console.log(`GET ${tags_url}`)
     const response = await client.request(`GET ${tags_url}`)
-    console.log(response)
+    // console.log(response)
     if (response.status !== 200) {
         throw `Could not get tags: GET ${tags_url} ${response.status}`
     }

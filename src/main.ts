@@ -15,7 +15,7 @@ async function run() {
     if (!pullRequest) {
         throw 'Could not get pull_request from context, exiting'
     }
-    console.log('pull_request: ', pullRequest)
+    // console.log('pull_request: ', pullRequest)
     console.log('merged: ', pullRequest.merged)
     console.log('state: ', pullRequest.state)
     console.log('milestone: ', pullRequest.milestone)
