@@ -27,3 +27,8 @@ export interface PullRequestWebhookPayload extends WebhookPayload {
         head: RepoWebhookPayload;
     },
   }
+
+  export interface GetTag {
+    name: string;
+    commit: any;
+  }

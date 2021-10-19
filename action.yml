@@ -1,12 +1,21 @@
-name: 'Bump tag with milestone'
+name: 'Tag with milestone'
 description: 'Bump a tag based on milestone attached to the PR'
 inputs:
-  repo-token:
+  repo_token:
     required: true
     description: 'Github repository token'
+  custom_tag:
+    default: '${MILESTONE}'
+    description: 'Custom Tag'
+  initial_tag_number:
+    default: 1
+    description: 'Initial tag number'
+  milestone_pattern:
+    default: '.+?'
+    description: 'Milestone pattern used to filter the tags while searching the last tag'
 outputs:
   new_tag: # id of output
-    description: 'New bump tag'
+    description: 'New tag'
 runs:
-  using: 'node12'
+  using: 'node14'
   main: 'dist/main.js'
