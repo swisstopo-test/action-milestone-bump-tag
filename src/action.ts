@@ -2,9 +2,9 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 // import simpleGit from 'simple-git'
 
+import { createTag, listTags } from './git'
 import { getLastTag, getNewTag, getTagPattern } from './utils'
 import { PullRequestWebhookPayload } from './interfaces'
-import { listTags } from './git'
 
 export default async function action(): Promise<void> {
     const custom_tag = core.getInput('custom_tag')
@@ -20,6 +20,10 @@ export default async function action(): Promise<void> {
     core.info(`PR state: ${pullRequest.state}`)
 
     if (pullRequest.merged) {
+        const { GITHUB_SHA } = process.env
+        if (!GITHUB_SHA) {
+            throw Error('GITHUB_SHA not defined')
+        }
         const milestone = pullRequest.milestone ? pullRequest.milestone.title : null
         core.info(`PR milestone: ${milestone}`)
         const tagPattern = getTagPattern(custom_tag, milestone_pattern, milestone)
@@ -39,6 +43,8 @@ export default async function action(): Promise<void> {
         core.info(`New Tag: ${newTag}`)
         core.setOutput('new_tag', newTag)
         core.setOutput('previous_tag', lastTag)
+
+        createTag(newTag, GITHUB_SHA)
 
         // const client = github.getOctokit(token);
         // get list of tags

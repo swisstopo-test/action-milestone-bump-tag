@@ -38,8 +38,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 // import simpleGit from 'simple-git'
-const utils_1 = __nccwpck_require__(918);
 const git_1 = __nccwpck_require__(3374);
+const utils_1 = __nccwpck_require__(918);
 function action() {
     return __awaiter(this, void 0, void 0, function* () {
         const custom_tag = core.getInput('custom_tag');
@@ -53,6 +53,10 @@ function action() {
         core.info(`PR merged: ${pullRequest.merged}`);
         core.info(`PR state: ${pullRequest.state}`);
         if (pullRequest.merged) {
+            const { GITHUB_SHA } = process.env;
+            if (!GITHUB_SHA) {
+                throw Error('GITHUB_SHA not defined');
+            }
             const milestone = pullRequest.milestone ? pullRequest.milestone.title : null;
             core.info(`PR milestone: ${milestone}`);
             const tagPattern = (0, utils_1.getTagPattern)(custom_tag, milestone_pattern, milestone);
@@ -65,6 +69,7 @@ function action() {
             core.info(`New Tag: ${newTag}`);
             core.setOutput('new_tag', newTag);
             core.setOutput('previous_tag', lastTag);
+            (0, git_1.createTag)(newTag, GITHUB_SHA);
             // const client = github.getOctokit(token);
             // get list of tags
             // core.debug(`GET ${pullRequest.base.repo.tags_url}`);
@@ -123,12 +128,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.listTags = void 0;
+exports.createTag = exports.listTags = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github_1 = __nccwpck_require__(5438);
 const octokit = (0, github_1.getOctokit)(core.getInput('github_token', { required: true }));
 /**
- * Fetch all tags for a given repository recursively
+ * Fetch all tags for the given repository recursively
  */
 function listTags(shouldFetchAllTags = false, fetchedTags = [], page = 1) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -140,6 +145,14 @@ function listTags(shouldFetchAllTags = false, fetchedTags = [], page = 1) {
     });
 }
 exports.listTags = listTags;
+/** Create and push a Tag for given commit */
+function createTag(newTag, GITHUB_SHA) {
+    return __awaiter(this, void 0, void 0, function* () {
+        core.info(`Creating and pushing new tag to the repo.`);
+        yield octokit.rest.git.createRef(Object.assign(Object.assign({}, github_1.context.repo), { ref: `refs/tags/${newTag}`, sha: GITHUB_SHA }));
+    });
+}
+exports.createTag = createTag;
 
 
 /***/ }),

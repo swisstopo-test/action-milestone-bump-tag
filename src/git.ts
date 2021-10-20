@@ -6,7 +6,7 @@ import { Tag } from './interfaces'
 const octokit = getOctokit(core.getInput('github_token', { required: true }))
 
 /**
- * Fetch all tags for a given repository recursively
+ * Fetch all tags for the given repository recursively
  */
 export async function listTags(
     shouldFetchAllTags = false,
@@ -24,4 +24,14 @@ export async function listTags(
     }
 
     return listTags(shouldFetchAllTags, [...fetchedTags, ...tags.data], page + 1)
+}
+
+/** Create and push a Tag for given commit */
+export async function createTag(newTag: string, GITHUB_SHA: string): Promise<void> {
+    core.info(`Creating and pushing new tag to the repo.`)
+    await octokit.rest.git.createRef({
+        ...context.repo,
+        ref: `refs/tags/${newTag}`,
+        sha: GITHUB_SHA
+    })
 }
