@@ -1,4 +1,4 @@
-import { getTagPattern, lastTag, getNewTag } from '../src/tags'
+import { getTagPattern, getNewTag, getLastTag } from '../src/utils'
 
 test('Tag pattern', () => {
     const pattern = getTagPattern('Test_${MILESTONE}_alpha-${TAG_NUMBER}', '\\d+', '20211010')
@@ -22,7 +22,7 @@ test('Tag pattern without milestone', () => {
 
 test('Get lat Tag', () => {
     expect(
-        lastTag(
+        getLastTag(
             [
                 { name: 'Test_20211010_alpha-3a' },
                 { name: '20211010' },
@@ -38,7 +38,7 @@ test('Get lat Tag', () => {
 
 test('Get lat Tag without milestone', () => {
     expect(
-        lastTag(
+        getLastTag(
             [
                 { name: 'Test_20211210_alpha-3a' },
                 { name: '20211010' },
@@ -55,7 +55,7 @@ test('Get lat Tag without milestone', () => {
 
 test('Get lat Tag without milestone without tag number', () => {
     expect(
-        lastTag(
+        getLastTag(
             [
                 { name: 'Test_20208110' },
                 { name: '20211210' },
@@ -73,7 +73,7 @@ test('Get lat Tag without milestone without tag number', () => {
 
 test('Get lat Tag with non existing milestone', () => {
     expect(
-        lastTag(
+        getLastTag(
             [
                 { name: 'Test_20208110' },
                 { name: '20211210' },

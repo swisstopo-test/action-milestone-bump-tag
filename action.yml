@@ -14,8 +14,10 @@ inputs:
     default: '.+?'
     description: 'Milestone pattern used to filter the tags while searching the last tag'
 outputs:
-  new_tag: # id of output
+  new_tag:
     description: 'New tag'
+  previous_tag:
+    description: 'Previous tag'
 runs:
   using: 'node12'
   main: 'dist/index.js'

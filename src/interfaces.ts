@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { WebhookPayload } from '@actions/github/lib/interfaces'
 
 export interface RepoWebhookPayload {
@@ -9,11 +10,9 @@ export interface RepoWebhookPayload {
 }
 
 export interface PullRequestWebhookPayload extends WebhookPayload {
-    // eslint-disable-next-line camelcase
     pull_request?: {
         [key: string]: any
         number: number
-        // eslint-disable-next-line camelcase
         html_url?: string
         body?: string
         merged: boolean
@@ -30,4 +29,11 @@ export interface PullRequestWebhookPayload extends WebhookPayload {
 
 export interface Tag {
     name: string
+    commit?: {
+        sha: string
+        url: string
+    }
+    zipball_url?: string
+    tarball_url?: string
+    node_id?: string
 }
